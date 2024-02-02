@@ -1,0 +1,176 @@
+    background-image: url("../static/back.svg");
+    background-repeat: no-repeat;
+    background-position-y:center;
+    background-position: center;
+    height: max-content;
+    width: max-content;
+
+
+
+    
+
+.cont{
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 9px;
+    width: 500px;
+    position:absolute;
+    left: 2.8in;
+    font-weight: 500;
+}
+
+
+
+
+.mainB{
+    text-align: center;
+    max-width: 1200px;
+    background-image: url("../static/back.svg");
+    background-repeat: no-repeat;
+    width: 1000px;
+    height: 600px;
+    background-position: top center;
+}
+.Heading{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 100;
+
+}
+.button{
+   background-image: url("../static/search-solid.svg");
+   background-repeat: no-repeat;
+   
+   height: 0.25in;
+   width: 0.25in;
+   background-blend-mode: overlay;
+   background-color: transparent;
+   border-color: white white white white; 
+   border-top: 50px;
+   border-radius: 0.5in;
+   border-width: 0;
+}
+.search-bar{
+    border: none;
+    outline: none;
+    flex: 1;
+    width: 4in;
+    position: absolute;
+    top:0.13in;
+    padding-left:0.2in;
+    font-weight: 400;
+    font-size: 15px;
+    font-family:  'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+}
+.altr{
+    position: absolute;
+    left: 4in;
+    top:1.4in;
+    color: black;
+    border: black ;
+    border-width: 1in;
+    border-radius: 5px;
+    background-color: blue;
+
+}
+.cont{
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 9px;
+    width: 500px;
+    position:absolute;
+    left: 2.8in;
+    font-weight: 500;
+}
+.btn{
+    height: 0.25in;
+    width: 0.25in;
+    background-blend-mode: overlay;
+    background-color: transparent;
+    border-color: white white white white; 
+    border-top: 50px;
+    border-radius: 0.5in;
+    border-width: 0;
+    opacity: 0.2;
+    position:relative;
+    top: 0.01in;
+    padding: 3px;
+    z-index: 1;
+}
+.btn1{
+    height: 0.25in;
+    width: 0.25in;
+    background-blend-mode: overlay;
+    background-color: transparent;
+    border-color: white white white white; 
+    border-top: 50px;
+    border-radius: 0.5in;
+    border-width: 0;
+    float: right;
+    position: absolute;
+    left: 5in; 
+    top:0.12in;
+    opacity: 0.2;
+}
+.btn2{
+    height: 0.25in;
+    width: 0.25in;
+    background-blend-mode: overlay;
+    background-color: transparent;
+    border-color: white white white white; 
+    border-top: 50px;
+    border-radius: 0.5in;
+    border-width: 0;
+    float: right;
+    position: absolute;
+    left: 5in; 
+    top:4.12in;
+    opacity: 0.2;
+}
+.line {
+    border-left: 1px solid #f9f9fb;
+    height: 43px;
+    margin: 0 10px;
+    border-left-width: 0.03in;
+    position: absolute;
+    top:0in;
+    left:4.8in
+}
+
+.Info{
+    display: flex;
+width: 700px;
+height: 60px;
+position: absolute;
+top: 3.1in;  
+left: 1.9in;
+background-color: #f9f9fb;
+opacity: 0.7;
+}
+.Info button{
+padding: 20px;
+font-size: 18px;
+background-color: transparent;
+border-width: 0;
+}
+.Info button:hover {
+    background-color:#dddddd;
+    transition: 0.2s;
+}
+.Info button:focus {
+    background-color:#cccccc;
+    transition: 0.1s;
+
+}
+.infodisp{
+    position: absolute;
+    top: 3.5in;
+    left: 1.9in;
+}

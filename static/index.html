@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+ <title> Stock Finder </title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src='https://kit.fontawesome.com/a076d05399.js' ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
+    <script src=http://127.0.0.1:5100></script>
+</head>
+<body class="mainB"> <!--onload="myFunction()"-->
+<h1 style="text-align: centre;" class="Heading" name="Hd">Stock Search</h1>
+
+<div class="cont">
+    <form onsubmit="return searchf()">
+  <!--  <button class="btn" onclick="searchf()"> <img src="../static/search-solid.svg"></button> -->
+  <button class="btn" type="submit"> <img src="../static/search-solid.svg"></button>
+    <input type="text"  autocomplete="off" placeholder="Enter Stock Ticker Symbol" name="sbar" class="search-bar",id="searchbar" oninput="handler()" required> <!--required-->
+    <div class="line"></div>
+    <button  class="btn1" type="reset" onclick="clearscr()"> <img src="../static/times-solid.svg"></button>
+   <!--  <input type="reset" value="Reset" class="btn1">
+    <button  class="btn1" onclick="clearscr()" > <img src="../static/times-solid.svg"></button> 
+  </form>  --> 
+</form>
+</div>
+<div class="altr" id="altr" name="altr"></div>
+
+
+<div class="Info" id ="infobtns" name ="iff" style="display: none;">
+    <button onclick="info()" id="btn1"> company</button>
+    <button  onclick="info_s()" id="btn2"> stocks </button>
+    <button  onclick="info_ch()" id="btn3" > charts </button>
+    <button  onclick="info_inf()" id="btn4" > info </button>
+
+</div>
+
+
+<div>
+<div class="infodisp" name="infodisp1" id="inf" style="display: none;">
+   <h1 style='color:black'> INDD </h1>
+</div>
+</div>
+
+<script>
+    
+const ip=document.getElementsByName('sbar');
+let comp_in="";
+let comp_ins="";
+let comp_inf="";
+
+//document.getElementById('infobtns').style.display="none";
+//document.getElementById('inf').style.display="none";
+function myFunction(){
+document.getElementById('infobtns').style.display="none";
+document.getElementById('inf').style.display="none";
+
+}
+
+function info(){
+    console.log("info")
+//    document.getElementById('inf').innerHTML="<h1 style='color:black'>INFO SHOULD BE DISPLAYED HERE<h1>";
+    if(comp_in.length!=0){
+        console.log("comp_in");
+        document.getElementById('inf').innerHTML=comp_in;
+        document.getElementById('btn1').focus();
+
+    }
+    else{
+        axios.get("http://127.0.0.1:5100/stocks_info",{ params: {"name":document.getElementsByName('sbar')[0].value } }).then(function(response){
+            console.log(response);
+
+            // check if the response is emplty - means company ticker not found
+
+            const t=response['data'] //JSON.stringify(response['data']);
+
+            if (!Object.hasOwn(t,'country')){
+                console.log("SDS");
+                document.getElementById('infobtns').style.display="none";
+                document.getElementById('inf').style.display="block";
+                // display the no search message
+                s="<br/><br/><br/><br/><br/><br/><div class='err_d'>";
+                s+="ERROR: No record has been found, please enter a vaild symbol</div>";
+                console.log(s);
+                document.getElementById('inf').innerHTML= s;
+    
+            }
+            else{
+                console.log(t['country']);
+                const el=document.getElementById('infobtns');
+                el.style.display='flex';
+                document.getElementById('inf').style.display='block';
+                document.getElementById('btn1').focus();
+        
+                s="<br/><br/><br/><br/><br/><br/><table class='tbl'>";
+                // width='50px height= 50px
+                s+="<td colspan='2'><img src='"+t['logo'] +"'></td>";
+                s+="<tr><td>Company Name</td><td>"+t['name']+"</td></tr>";
+                s+="<tr><td>Stock Ticker Symbol</td><td>"+t['ticker']+"</td></tr>";
+                s+="<tr><td>Stock Exchange Code</td><td>"+t['exchange']+"</td></tr>";
+                s+="<tr><td>Company Start Date</td><td>"+t['ipo']+"</td></tr>";
+                s+="<tr><td>Category</td><td>"+t['finnhubIndustry']+"</td></tr></table>";
+                document.getElementById('inf').innerHTML= s;
+                //comp_in=s;
+            }
+            comp_in=s;
+        })
+    }
+}
+
+
+
+
+function info_s(){
+    console.log("info_s");
+//    document.getElementById('inf').innerHTML="<h1 style='color:black'>INFO SHOULD BE DISPLAYED HERE<h1>";
+    if(comp_ins.length!=0){
+        console.log("comp_ins");
+        document.getElementById('inf').innerHTML=comp_ins;
+        document.getElementById('btn2').focus();
+    }
+    else{
+        axios.get("http://127.0.0.1:5100/sumamry_info",{ params: {"name":document.getElementsByName('sbar')[0].value } }).then(function(response){
+            console.log(response);
+
+            // check if the response is emplty - means company ticker not found
+
+            const t=response['data'] //JSON.stringify(response['data']);
+
+            if (!Object.hasOwn(t,'c')){
+                console.log("SDS");
+                document.getElementById('infobtns').style.display="none";
+                document.getElementById('inf').style.display="block";
+                // display the no search message
+                s="<br/><br/><br/><br/><br/><br/><div class='err_d'>";
+                s+="ERROR: No record has been found, please enter a vaild symbol</div>";
+                console.log(s);
+                document.getElementById('inf').innerHTML= s;
+    
+            }
+            else{
+                console.log(t['c']);
+                const el=document.getElementById('infobtns');
+                el.style.display='flex';
+                document.getElementById('inf').style.display='block';
+                document.getElementById('btn2').focus();
+                const date = new Date(t['t'] * 1000);
+                let dt=  date.getDate()+" "+ (date.getMonth()+1) +","+date.getFullYear();
+                console.log(dt)
+                s="<br/><br/><br/><br/><br/><br/><table class='tbl'>";
+                s+="<tr><td>Stock Ticker Symbol</td><td>"+document.getElementsByName('sbar')[0].value+"</td></tr>";
+                s+="<tr><td>Trading Day</td><td>"+dt+"</td></tr>";
+                s+="<tr><td>Previous Closing Price</td><td>"+t['pc']+"</td></tr>";
+                s+="<tr><td>Opening Price</td><td>"+t['o']+"</td></tr>";
+                s+="<tr><td>High Price</td><td>"+t['h']+"</td></tr>";
+                s+="<tr><td>Low Price</td><td>"+t['l']+"</td></tr>";
+                s+="<tr><td>Change</td><td>"+t['d']+"</td></tr>";
+                s+="<tr><td>Change Percent</td><td>"+t['dp']+"</td></tr></table>";
+                s+="<h3>Recommendation trends div and use flex with 5 boxes </h3>"
+                document.getElementById('inf').innerHTML= s;
+                //comp_in=s;
+            }
+            comp_ins=s;
+        })
+    }
+
+
+   
+
+}
+
+function info_inf(){
+    console.log("info_f");
+//    document.getElementById('inf').innerHTML="<h1 style='color:black'>INFO SHOULD BE DISPLAYED HERE<h1>";
+    if(comp_inf.length!=0){
+        console.log("comp_inf");
+        document.getElementById('btn4').focus();
+        document.getElementById('inf').innerHTML=comp_inf;
+    }
+    else{
+        axios.get("http://127.0.0.1:5100/news",{ params: {"name":document.getElementsByName('sbar')[0].value } }).then(function(response){
+            console.log(response);
+
+            // check if the response is emplty - means company ticker not found
+
+            const t=response['data'] //JSON.stringify(response['data']);
+
+            if (t.length==0){
+                console.log("SDS");
+                document.getElementById('infobtns').style.display="none";
+                document.getElementById('inf').style.display="block";
+                // display the no search message
+                s="<br/><br/><br/><br/><br/><br/><div class='err_d'>";
+                s+="ERROR: No record has been found, please enter a vaild symbol</div>";
+                console.log(s);
+                document.getElementById('inf').innerHTML= s;
+    
+            }
+            else{
+                //console.log(t['c']);
+                const el=document.getElementById('infobtns');
+                el.style.display='flex';
+                document.getElementById('inf').style.display='block';
+                document.getElementById('btn4').focus();
+
+                s="<br/><br/><br/><br/><br/><br/><table class='tbl3'>";
+
+                for(i=0;i<5;i++){
+                    const date = new Date(t[i]['datetime'] * 1000);
+                    let dt=  date.getDate()+" "+ (date.getMonth()+1) +","+date.getFullYear();
+                    const options = { day: '2-digit', month: 'long', year: 'numeric' }; // chatgpt
+                    const formattedDate = date.toLocaleDateString('en-US', options);
+                    console.log(formattedDate);
+                    console.log(dt)
+                    s+="<tr><td><img src='"+t[i]['image']+"'style='width:50px;height:50px'></td>";
+                    s+="<td><p>"+t[i]['headline']+"<br/></p><p style='text-align:left'>"+ formattedDate +"<br/></p><a href="+t[i]['url']+" style='float:left'>See Original Post</a></td></tr>" ;
+                }
+                s+="</table>";
+                document.getElementById('inf').innerHTML= s;
+                //comp_in=s;
+            }
+            comp_inf=s;
+        })
+    }
+
+
+
+
+
+}
+
+
+
+
+function clearscr(){
+    // these lines are for clearing the search values and again placing the placeholder
+    document.getElementsByName('sbar')[0].value='';
+    document.getElementsByName('sbar')[0].placeholder='Enter Stock Ticker Symbol';
+    
+    console.log("s");
+    document.getElementsByName('Hd');
+    console.log(ip);
+
+    // these lines are to clear the buttons and text/ under it 
+    document.getElementById('infobtns').style.display="none";
+    document.getElementById('inf').style.display="none";
+
+    console.log(document.getElementsByName('sbar'));
+}
+function handler(){
+    if (document.getElementsByName('sbar')[0].value){
+        console.log(document.getElementsByName('sbar')[0].value,"SS");
+
+    }
+}
+function searchf(){
+    const p=document.getElementsByName('altr')[0]
+    if (document.getElementsByName('sbar')[0].value){
+        console.log("search",document.getElementsByName('sbar')[0].value);
+        console.log(p)
+
+        /*
+        // these lines are for initial showing when searched 
+        const el=document.getElementById('infobtns');
+        el.style.display='flex';
+        document.getElementById('inf').style.display='block';
+        document.getElementById('btn1').focus();
+
+        */
+
+
+        // axios
+        axios.get("http://127.0.0.1:5100/stocks_info",{ params: {"name":document.getElementsByName('sbar')[0].value } }).then(function(response){
+            console.log(response);
+
+            // check if the response is emplty - means company ticker not found
+
+            const t=response['data'] //JSON.stringify(response['data']);
+
+            if (!Object.hasOwn(t,'country')){
+                console.log("SDS");
+                document.getElementById('infobtns').style.display="none";
+                document.getElementById('inf').style.display="block";
+                // display the no search message
+                s="<br/><br/><br/><br/><br/><br/><div class='err_d'>";
+                s+="ERROR: No record has been found, please enter a vaild symbol</div>";
+                console.log(s);
+                document.getElementById('inf').innerHTML= s;
+    
+            }
+            else{
+                console.log(t['country']);
+                const el=document.getElementById('infobtns');
+                el.style.display='flex';
+                document.getElementById('inf').style.display='block';
+                document.getElementById('btn1').focus();
+        
+                s="<br/><br/><br/><br/><br/><br/><table class='tbl'>";
+                // width='50px height= 50px
+                s+="<td colspan='2'><img src='"+t['logo'] +"'></td>";
+                s+="<tr><td>Company Name</td><td>"+t['name']+"</td></tr>";
+                s+="<tr><td>Stock Ticker Symbol</td><td>"+t['ticker']+"</td></tr>";
+                s+="<tr><td>Stock Exchange Code</td><td>"+t['exchange']+"</td></tr>";
+                s+="<tr><td>Company Start Date</td><td>"+t['ipo']+"</td></tr>";
+                s+="<tr><td>Category</td><td>"+t['finnhubIndustry']+"</td></tr></table>";
+                document.getElementById('inf').innerHTML= s;
+                comp_in=s;
+            }
+            //comp_in=s;
+        })
+        
+        return false; // prevent from submission
+    }
+    else{
+        p.innerHTML="<p> <div> </div> HI</p>";
+        return false;
+    }
+}
+</script>
+</body>
+
+</html>
