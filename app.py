@@ -23,6 +23,17 @@ def recmd_info():
    return requests.get(url).content  #"HI" #render_template("index.html")
 
 
+
+@app.route('/charts')
+def charts():
+   to= datetime.datetime.now().strftime('%Y-%m-%d')
+   #from_d=(datetime.datetime.now() - datetime.timedelta(190) ).strftime('%Y-%m-%d')
+   from_d=(datetime.datetime.now()+ relativedelta(months=-6)).strftime('%Y-%m-%d')
+   url="https://api.polygon.io/v2/aggs/ticker/"+request.args.get("name").upper()+"/range/1/day/"+from_d+"/"+to+"?adjusted=true&sort=asc&apiKey=ctO8iVF_Gi19afBovU1ZSr6UIxqt8Fr3"
+   print(url)
+   data=requests.get(url).content 
+   return data
+	
 @app.route('/news')
 def news():
    to= datetime.datetime.now().strftime('%Y-%m-%d')
