@@ -7,6 +7,11 @@
     <script src='https://kit.fontawesome.com/a076d05399.js' ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script src=https://stockinfo89.azurewebsites.net></script>
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/accessibility.js"></script>
+
 </head>
 <body class="mainB"> <!--onload="myFunction()"-->
 <h1 style="text-align: centre;" class="Heading" name="Hd">Stock Search</h1>
@@ -47,6 +52,7 @@ const ip=document.getElementsByName('sbar');
 let comp_in="";
 let comp_ins="";
 let comp_inf="";
+let comp_chrt="";
 
 //document.getElementById('infobtns').style.display="none";
 //document.getElementById('inf').style.display="none";
@@ -167,6 +173,264 @@ function info_s(){
    
 
 }
+
+function info_ch(){
+    console.log("info_chrt");
+//    document.getElementById('inf').innerHTML="<h1 style='color:black'>INFO SHOULD BE DISPLAYED HERE<h1>";
+    if(comp_chrt.length!=0){
+        console.log("comp_chrt");
+        document.getElementById('inf').innerHTML=comp_chrt;
+        document.getElementById('btn3').focus();
+    }
+    else{
+        axios.get("https://stockinfo89.azurewebsites.net/charts",{ params: {"name":document.getElementsByName('sbar')[0].value } }).then(function(response){
+            console.log(response);
+
+            // check if the response is emplty - means company ticker not found
+
+            const t=response['data'] //JSON.stringify(response['data']);
+
+            if (t.length==0){
+                console.log("SDS");
+                document.getElementById('infobtns').style.display="none";
+                document.getElementById('inf').style.display="block";
+                // display the no search message
+                s="<br/><br/><br/><br/><br/><br/><div class='err_d'>";
+                s+="ERROR: No record has been found, please enter a vaild symbol</div>";
+                console.log(s);
+                document.getElementById('inf').innerHTML= s;
+    
+            }
+            else{
+                console.log(t['results'][101]);
+                data=t['results'];
+                data1=[]
+                data2=[]
+                for (i=0;i<data.length;i++){
+                    data1.push([data[i]['t'],data[i]['c']]);
+                    data2.push([data[i]['t'],data[i]['v']]);
+                }
+                console.log(data1);
+                
+                (async () => {
+
+                    // Create the chart
+                    Highcharts.stockChart('inf', {
+
+                        rangeSelector: {
+                            selected: 1,
+                            inputEnabled:false,
+                            allButtonsEnabled: true,
+                            buttons: [{
+                                type: 'week',
+                                count: 1,
+                                text: '7d',
+                                dataGrouping: {
+                                    forced: true,
+                                    units: [['day', [1]]]
+                                }
+                            }, {
+                                type: 'day',
+                                count: 15,
+                                text: '15d',
+                                dataGrouping: {
+                                    forced: true,
+                                    units: [['day', [1]]]
+                                }
+                            }, {
+                                type: 'month',
+                                count: 1,
+                                text: '1m',
+                                dataGrouping: {
+                                    forced: true,
+                                    units: [['day', [1]]]
+                                }},
+                               {
+                                type: 'month',
+                                count: 3,
+                                text: '3m',
+                                dataGrouping: {
+                                    forced: true,
+                                    units: [['day', [1]]]
+                                }},
+                                {
+                                type: 'month',
+                                count: 6,
+                                text: '6m',
+                                dataGrouping: {
+                                    forced: true,
+                                    units: [['day', [1]]]
+                                }
+                            }]
+                            //buttonTheme: {
+                            //    width: 60
+                            //}
+                        },
+                
+                        title: {
+                            text: 'AAPL Stock Price'
+                        },
+                        subtitle: {
+                            text: 'Source: <a href="https://polygon.io/" target="_blank">Polygon.io</a>'
+                        },
+                       // xAxis:[],
+                       navigator: {
+                        series: {
+                            accessibility: {
+                                exposeAsGroupOnly: true
+                            }
+                        }
+                    },
+         yAxis: [
+      
+      {
+        title: {
+          text: 'Stock Price'
+        },
+        labels: {
+            format: '{value:.2f}', // Show two decimal places
+            offset: 2
+          },
+        opposite: false
+      },
+      {
+        title: {
+          text: 'Volume',
+        }    
+      }
+      
+    ],series: [
+    {
+        name: 'AAPL Stock Price',
+        data: data1,
+        type: 'area',
+        threshold: null,
+        yaxis:1,
+        tooltip: {
+            valueDecimals: 2
+        },
+        fillColor: {
+            linearGradient: {
+                x1: 0,
+                y1: 0,
+                x2: 0,
+                y2: 1
+            },
+            stops: [
+                [0, Highcharts.getOptions().colors[0]],
+                [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+            ]
+        }
+        /*
+      name: 'Stock Price',
+      type:"area",
+      data: data1,
+      tooltip: {
+        valueDecimals: 2
+      }*/
+    },
+    {
+      name: 'Volume',
+      type: 'column',
+      yAxis: 1,
+      data: data2,
+      color: 'black',
+      pointWidth: 3
+    }
+  ]
+                        /*
+                
+                        rangeSelector: {
+                            selected: 1
+                        },
+                
+                        title: {
+                            text: 'AAPL Stock Price'
+                        },
+                
+                 /*       navigator: {
+                            series: {
+                                accessibility: {
+                                    exposeAsGroupOnly: true
+                                }
+                            }
+                        },
+            
+                yAxis: [
+      {
+        title: {
+          text: 'Stock Price',
+        },
+        labels: {
+            align:"left",
+          format: '{value:.2f}' // Show two decimal places
+        }
+      },
+      {
+        title: {
+          text: 'Volume'
+        },
+        opposite: true
+      }
+    ],series: [
+    {
+      name: 'Stock Price',
+      type:"area",
+      data: data1,
+      tooltip: {
+        valueDecimals: 2
+      }
+    },
+    {
+      name: 'Volume',
+      type: 'column',
+      yAxis: 1,
+      data: data2,
+      color: 'grey'
+    }
+  ]*/
+
+                        /*series: [  
+                        
+                        {
+                            name: 'AAPL Stock Price',
+                            data: data1,
+                            type: 'area',
+                            threshold: null,
+                            yaxis:1,
+                            tooltip: {
+                                valueDecimals: 2
+                            },
+                            fillColor: {
+                                linearGradient: {
+                                    x1: 0,
+                                    y1: 0,
+                                    x2: 0,
+                                    y2: 1
+                                },
+                                stops: [
+                                    [0, Highcharts.getOptions().colors[0]],
+                                    [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                                ]
+                            }
+                        },
+                        { name: 'Volume', type: 'column',data: data2, color:'black' }
+                        
+                        ]*/
+                    });
+                })();
+                //comp_in=s;
+            }
+            //comp_ins=s;
+        })
+    }
+
+
+   
+
+}
+
+
 
 function info_inf(){
     console.log("info_f");
