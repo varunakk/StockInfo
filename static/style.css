@@ -159,10 +159,10 @@ th, td {
 }
 
 .tbl3{
-    border: 1px solid;
+   border: 1px solid;
     position: absolute;
     top:0.2in;
-    left: -1in;
+    left: 0in;
     width:600px
 }
 
