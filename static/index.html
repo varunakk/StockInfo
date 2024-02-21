@@ -192,8 +192,8 @@ function info_s(){
                 s+="<tr><td class='tdcls1'>Opening Price</td><td class='tdcls'>"+t['o']+"</td></tr>";
                 s+="<tr><td class='tdcls1'>High Price</td><td class='tdcls'>"+t['h']+"</td></tr>";
                 s+="<tr><td class='tdcls1'>Low Price</td><td class='tdcls'>"+t['l']+"</td></tr>";
-                s+="<tr><td class='tdcls1'>Change</td><td class='tdcls'>"+t['d']+"<img src='"+imgsrc+"' class='arrw'></td></tr>";
-                s+="<tr><td class='tdcls1'>Change Percent</td><td class='tdcls'>"+t['dp']+"<img src='"+imgsrc1+"' class='arrw'></td></tr></table>";
+                s+="<tr><td class='tdcls1'>Change</td><td class='tdcls'>"+Math.abs(t['d'])+"<img src='"+imgsrc+"' class='arrw'></td></tr>";
+                s+="<tr><td class='tdcls1'>Change Percent</td><td class='tdcls'>"+Math.abs(t['dp'])+"<img src='"+imgsrc1+"' class='arrw'></td></tr></table>";
                 s+="<h3 class='rec'>Recommendation trends </h3>";
                 s+="<div class='flex-container'>";
                 let dd=info_s1_res['data'];
@@ -348,7 +348,7 @@ function info_ch(){
                         },
                 
                         title: {
-                            text: 'Stock Price'+ document.getElementsByName('sbar')[0].value.toUpperCase()+" "+dform
+                            text: 'Stock Price '+ document.getElementsByName('sbar')[0].value.toUpperCase()+" "+dform
                         },
                         subtitle: {
                             text: '<a href="https://polygon.io/" target="_blank" style="color:blue;" class="link">Source: Polygon.io</a>'
